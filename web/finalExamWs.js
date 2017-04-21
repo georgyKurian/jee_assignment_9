@@ -21,11 +21,11 @@
  =================================================================*/
 
 $(document).ready(function () {
-     var productsWsUri = "ws://localhost:8080/CSD4464-Assign9/productsSocket";
+    var productsWsUri = "ws://localhost:8080/CSD4464-Assign9/productsSocket";
     var pws = new WebSocket(productsWsUri);
     var vendorsWsUri = "ws://localhost:8080/CSD4464-Assign9/vendorsSocket";
     var vws = new WebSocket(vendorsWsUri);
-    
+
     pws.onmessage = function (evt) {
         if (typeof evt.data !== 'undefined') {
             var data = $.parseJSON(evt.data);
@@ -36,9 +36,9 @@ $(document).ready(function () {
                     result += '<tr><td>' + data[i].productId + '</td><td>' + data[i].name + '</td><td>' + data[i].vendorId + '</td></tr>';
                 result += '</tbody>';
                 $('#products').html(result);
-            } else {                
+            } else {
                 $('#productName').val(data.name);
-                $('#productVendor').val(data.vendorId);            
+                $('#productVendor').val(data.vendorId);
             }
         }
     };
@@ -54,11 +54,10 @@ $(document).ready(function () {
                             '</td><td>' + data[i].phoneNumber + '</td></tr>';
                 result += '</tbody>';
                 $('#vendors').html(result);
-            }
-            else {                
+            } else {
                 $('#vendorName').val(data.name);
                 $('#vendorContact').val(data.contactName);
-                $('#vendorPhone').val(data.phoneNumber);            
+                $('#vendorPhone').val(data.phoneNumber);
             }
         }
     };

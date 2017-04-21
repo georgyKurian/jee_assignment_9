@@ -23,6 +23,7 @@ import javax.json.JsonObject;
  * @author <ENTER YOUR NAME HERE>
  */
 public class Vendor {
+
     private int vendorId;
     private String name;
     private String contactName;
@@ -37,12 +38,12 @@ public class Vendor {
         this.contactName = contactName;
         this.phoneNumber = phoneNumber;
     }
-    
+
     public Vendor(JsonObject jsonObject) {
-        this.vendorId = jsonObject.getInt("vendorId",0);
-        this.name = jsonObject.getString("name","");
-        this.contactName = jsonObject.getString("contactName","");
-        this.phoneNumber = jsonObject.getString("phoneNumber","");
+        this.vendorId = jsonObject.getInt("vendorId", 0);
+        this.name = jsonObject.getString("name", "");
+        this.contactName = jsonObject.getString("contactName", "");
+        this.phoneNumber = jsonObject.getString("phoneNumber", "");
     }
 
     public int getVendorId() {
@@ -76,7 +77,7 @@ public class Vendor {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-    
+
     // TODO: Create this entity based on the documentation provided
     public JsonObject toJson() {
         return Json.createObjectBuilder()

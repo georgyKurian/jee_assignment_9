@@ -23,6 +23,7 @@ import javax.json.JsonObject;
  * @author <ENTER YOUR NAME HERE>
  */
 public class Product {
+
     private int productId;
     private String name;
     private int vendorId;
@@ -35,7 +36,7 @@ public class Product {
         this.name = name;
         this.vendorId = vendorId;
     }
-    
+
     public Product(JsonObject json) {
         productId = json.getInt("productId", 0);
         name = json.getString("name", "");
@@ -65,7 +66,7 @@ public class Product {
     public void setVendorId(int vendorId) {
         this.vendorId = vendorId;
     }
-    
+
     public JsonObject toJson() {
         return Json.createObjectBuilder()
                 .add("productId", productId)

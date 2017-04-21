@@ -95,11 +95,11 @@ public class ProductsController {
         try {
             String sql = "DELETE FROM products WHERE productId= ?";
             Connection conn = DBUtils.getConnection();
-            
+
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, p.getProductId());
             pstmt.executeUpdate();
-            
+
             conn.close();
         } catch (SQLException ex) {
             Logger.getLogger(VendorsController.class.getName()).log(Level.SEVERE, null, ex);
