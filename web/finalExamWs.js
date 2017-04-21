@@ -105,6 +105,7 @@ $(document).ready(function () {
     $('#addVendor').click(function () {
         vws.send(JSON.stringify({post: "vendors",
             data: {
+                vendorId: parseInt($('#vendorId').val()),
                 name: $('#vendorName').val(),
                 contactName: $('#vendorContact').val(),
                 phoneNumber: $('#vendorPhone').val()

@@ -15,11 +15,91 @@
  */
 package com.abcindustries.websockets;
 
+import com.abcindustries.controllers.ProductsController;
+import com.abcindustries.controllers.VendorsController;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.websocket.OnMessage;
+import javax.websocket.RemoteEndpoint;
+import javax.websocket.Session;
+import javax.websocket.server.ServerEndpoint;
+
 /**
  *
- * @author <ENTER YOUR NAME HERE>
+ * @author Georgi
  */
+@ServerEndpoint("/vendorsSocket")
+@ApplicationScoped
 public class VendorsWebSocket {
 
-    // TODO: Model this after the ProductsWebSocket
+    List<Session> sessionList = new ArrayList<>();
+
+    @Inject
+    VendorsController vendors;
+
+    // TODO: Inject the VendorsController as well
+    @OnMessage
+    public void onMessage(String message, Session session) throws IOException {
+
+        if (!sessionList.contains(session)) {
+            sessionList.add(session);
+        }
+
+        String output = "";
+        JsonObject json = Json.createReader(new StringReader(message)).readObject();
+        if (json.containsKey("get") && json.getString("get").equals("vendors")) {
+
+            if (json.containsKey("id")) {
+                output = vendors.getById(json.getInt("id")).toJson().toString();
+            } else if (json.containsKey("search")) {
+                output = vendors.getBySearchJson(json.getString("search")).toString();
+            } else {
+                output = vendors.getAllByJSON().toString();
+            }
+
+        } else if (json.containsKey("post") && json.getString("post").equals("vendors")) {
+
+            JsonObject productJson = json.getJsonObject("data");
+            vendors.addJson(productJson);
+            output = vendors.getAllByJSON().toString();
+
+        } else if (json.containsKey("put") && json.getString("put").equals("vendors")) {
+
+            JsonObject productJson = json.getJsonObject("data");
+            int id = productJson.getInt("vendorId");
+
+            if (vendors.getById(id) == null) {
+                vendors.addJson(productJson);
+            } else {
+                vendors.editJson(id, productJson);
+            }
+
+            output = vendors.getAllByJSON().toString();
+
+        } else if (json.containsKey("delete") && json.getString("delete").equals("vendors")) {
+
+            if (json.containsKey("id")) {
+                vendors.delete(json.getInt("id"));
+                output = vendors.getAllByJSON().toString();
+            }
+
+        } else {
+
+            output = Json.createObjectBuilder()
+                    .add("error", "Invalid Request")
+                    .add("original", json)
+                    .build().toString();
+
+        }
+        // TODO: Return the output string to the user that sent the message
+        RemoteEndpoint.Basic basic = session.getBasicRemote();
+        basic.sendText(output);
+
+    }
 }
